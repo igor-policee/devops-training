@@ -1,9 +1,9 @@
 FROM node:14.15.0-stretch AS builder
-WORKDIR /src/skillbox-deploy-blue-green
+WORKDIR /src/node-skillbox
 COPY . .
 RUN yarn install
 RUN yarn build
 
 FROM alpine:latest
-COPY --from=builder /src/skillbox-deploy-blue-green/build /src/skillbox-deploy-blue-green/build
-CMD ["ls", "/src/skillbox-deploy-blue-green/build"]
+COPY --from=builder /src/node-skillbox/build /src/node-skillbox/build
+CMD ["ls", "/src/node-skillbox/build"]

@@ -16,9 +16,10 @@ services:
 before_script:
   - docker info
 
-build:
+build_node_skillbox:
   stage: build
   script:
     - docker build -t node-skillbox:test .
+#    - docker push -> gitlab registry
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
