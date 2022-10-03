@@ -1,0 +1,5 @@
+/.idea/
+/.venv/
+/.git/
+/vm-configure-ansible/.ansible-vault-pass.txt
+/vm-configure-ansible/hosts
