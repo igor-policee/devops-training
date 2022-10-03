@@ -1,0 +1,36 @@
+---
+
+- name: Configure ssh
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.old_line }}"
+    line: "{{ item.new_line }}"
+  loop:
+    - { old_line: "^#ClientAliveInterval", new_line: "ClientAliveInterval 120" }
+    - { old_line: "^#ClientAliveCountMax", new_line: "ClientAliveCountMax 10" }
+  notify:
+    Restart service -> sshd
+
+- name: Update all packages
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    update_cache: true
+
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: true
+  notify:
+    Start and enable service -> docker
+
+- name: Install docker-compose
+  ansible.builtin.get_url:
+    url: "{{ docker_compose_source_url }}"
+    dest: /usr/local/bin/docker-compose
+    mode: u+x,g+x
+
+#- name: Install oh-my-zsh via curl
+#  ansible.builtin.shell: >-
+#    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

@@ -1,0 +1,30 @@
+---
+
+- name: Make dir
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ nginx_paths }}"
+
+- name: Synchronization dir
+  ansible.posix.synchronize:
+    src: ./files/nginx_conf/
+    dest: /etc/nginx_conf
+
+- name: Pull docker image
+  community.docker.docker_image:
+    name: "{{ nginx_image }}"
+    source: pull
+
+- name: Run docker container
+  community.docker.docker_container:
+    name: "{{ nginx_container_name }}"
+    image: "{{ nginx_image }}"
+    restart: false
+    restart_policy: always
+    volumes:
+      - /etc/build-skillbox:/usr/share/nginx/html/:ro
+      - /etc/nginx_conf/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/nginx_conf/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"

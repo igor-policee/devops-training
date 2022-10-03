@@ -1,0 +1,43 @@
+---
+
+- name: Pull docker image
+  community.docker.docker_image:
+    name: "{{ gitlab_runner_image }}"
+    source: pull
+
+- name: Create a volume
+  community.docker.docker_volume:
+    name: "{{ gitlab_runner_volume }}"
+
+- name: Run docker container
+  community.docker.docker_container:
+    name: "{{ gitlab_runner_name }}"
+    image: "{{ gitlab_runner_image }}"
+    restart: false
+    restart_policy: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "{{ gitlab_runner_volume }}:/etc/gitlab-runner"
+
+- name: Check GitLab Runner registration
+  ansible.builtin.shell: |-
+    docker exec -ti {{ gitlab_runner_name }} cat /etc/gitlab-runner/config.toml | egrep {{ gitlab_url }} || echo 'runner not registered'
+  register: check_result
+
+- name: DEBUG
+  ansible.builtin.debug:
+    var: check_result['stdout']
+
+- name: Register GitLab Runner
+  community.docker.docker_container_exec:
+    container: "{{ gitlab_runner_name }}"
+    command: >-
+      gitlab-runner register
+      --non-interactive
+      --url {{ gitlab_url }}
+      --registration-token {{ gitlab_reg_token }}
+      --executor docker
+      --docker-image "docker:20.10.16"
+      --docker-privileged
+      --docker-volumes "/certs/client"
+  when: check_result['stdout'] == 'runner not registered'

@@ -1,0 +1,7 @@
+---
+
+nginx_paths:
+  - /etc/nginx_conf
+  - /etc/build-skillbox
+nginx_image: "nginx:stable"
+nginx_container_name: nginx-skillbox
