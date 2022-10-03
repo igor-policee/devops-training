@@ -23,7 +23,7 @@
     restart: false
     restart_policy: always
     volumes:
-      - /etc/build-skillbox:/usr/share/nginx/html/:ro
+      - /etc/node-skillbox-build:/usr/share/nginx/html/:ro
       - /etc/nginx_conf/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/nginx_conf/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
