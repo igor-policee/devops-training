@@ -1,0 +1,7 @@
+---
+
+- name: Start and enable service -> gitlab-runner
+  ansible.builtin.service:
+    name: gitlab-runner
+    state: started
+    enabled: true

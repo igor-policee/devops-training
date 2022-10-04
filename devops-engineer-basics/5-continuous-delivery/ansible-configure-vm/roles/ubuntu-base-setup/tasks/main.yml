@@ -1,6 +1,6 @@
 ---
 
-- name: Configure ssh
+- name: Configure -> ssh
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "{{ item.old_line }}"
@@ -17,7 +17,7 @@
     state: latest
     update_cache: true
 
-- name: Install packages
+- name: "Install packages -> {{ packages }}"
   ansible.builtin.apt:
     name: "{{ packages }}"
     state: latest
@@ -25,7 +25,7 @@
   notify:
     Start and enable service -> docker
 
-- name: Install docker-compose
+- name: Install -> docker-compose
   ansible.builtin.get_url:
     url: "{{ docker_compose_source_url }}"
     dest: /usr/local/bin/docker-compose

@@ -12,11 +12,15 @@
       include_role:
         name: centos-base-setup
       when: ansible_distribution == 'CentOS'
-    #
-    - name: Setup -> GitLab Runner
-      include_role:
-        name: gitlab-runner-setup
 
-#    - name: Setup -> Nginx
+    - name: Setup -> GitLab Runner (Docker)
+      include_role:
+        name: gitlab-runner-docker-setup
+
+    - name: Setup -> GitLab Runner (Ubuntu)
+      include_role:
+        name: gitlab-runner-ubuntu-setup
+
+#    - name: Setup -> Nginx (Docker)
 #      include_role:
 #        name: nginx-setup

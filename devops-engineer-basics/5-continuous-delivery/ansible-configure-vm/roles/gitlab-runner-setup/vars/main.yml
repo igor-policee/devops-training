@@ -1,8 +1,0 @@
----
-
-gitlab_runner_name: runner-vm-build-01
-gitlab_runner_volume: gitlab-runner-volume
-gitlab_runner_tags: docker
-gitlab_runner_image: gitlab/gitlab-runner:latest
-gitlab_url: https://gitlab.skillbox.ru/
-gitlab_reg_token: bCVatDMZvF2dKKkxrdug
