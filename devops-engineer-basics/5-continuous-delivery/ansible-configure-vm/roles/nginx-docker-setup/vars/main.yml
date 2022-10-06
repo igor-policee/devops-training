@@ -1,7 +1,6 @@
 ---
 
-nginx_paths:
-  - /etc/nginx_conf
-  - /etc/node-skillbox-build
-nginx_image: "nginx:stable"
+build_path: /etc/node-skillbox-build
+nginx_conf_path: /etc/nginx_conf
+nginx_image: nginx:stable
 nginx_container_name: nginx-server
