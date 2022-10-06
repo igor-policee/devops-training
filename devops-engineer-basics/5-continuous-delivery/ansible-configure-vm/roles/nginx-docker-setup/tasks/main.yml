@@ -1,40 +1,11 @@
 ---
 
-- name: "Make dir -> {{ build_path }}"
-  ansible.builtin.file:
-    path: "{{ build_path }}"
-    state: directory
-    owner: gitlab-runner
-    group: gitlab-runner
-
-- name: "Make dir -> {{ nginx_conf_path }}"
-  ansible.builtin.file:
-    path: "{{ nginx_conf_path }}"
-    state: directory
-    owner: gitlab-runner
-    group: gitlab-runner
-
-- name: "Get stats of a file -> {{ nginx_conf_path }}/default.conf"
-  ansible.builtin.stat:
-    path: "{{ nginx_conf_path }}/default.conf"
-  register: nginx_conf
-
-- name: "Synchronization -> {{ nginx_conf_path }}/default.conf"
-  ansible.posix.synchronize:
-    src: ./files/nginx_conf/default.conf
-    dest: "{{ nginx_conf_path }}/default.conf"
-  when: not nginx_conf['stat']['exists']
-
-- name: "Get stats of a file -> {{ nginx_conf_path }}/nginx.conf"
-  ansible.builtin.stat:
-    path: "{{ nginx_conf_path }}/nginx.conf"
-  register: nginx_conf
-
-- name: "Synchronization -> {{ nginx_conf_path }}/nginx.conf"
-  ansible.posix.synchronize:
-    src: ./files/nginx_conf/nginx.conf
-    dest: "{{ nginx_conf_path }}/nginx.conf"
-  when: not nginx_conf['stat']['exists']
+- name: "Create volume -> {{ build_volume }}, {{ nginx_conf_volume }}"
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  loop:
+    - "{{ build_volume }}"
+    - "{{ nginx_conf_volume }}"
 
 - name: Pull docker image
   community.docker.docker_image:
@@ -48,8 +19,7 @@
     restart: false
     restart_policy: always
     volumes:
-      - "{{ build_path }}:/usr/share/nginx/html/:ro"
-      - "{{ nginx_conf_path }}/nginx.conf:/etc/nginx/nginx.conf:ro"
-      - "{{ nginx_conf_path }}/default.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "{{ build_volume }}:/usr/share/nginx"
+      - "{{ nginx_conf_volume }}:/etc/nginx"
     ports:
       - "80:80"

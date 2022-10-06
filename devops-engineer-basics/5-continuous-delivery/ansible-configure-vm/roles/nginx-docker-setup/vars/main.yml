@@ -1,6 +1,6 @@
 ---
 
-build_path: /etc/node-skillbox-build
-nginx_conf_path: /etc/nginx_conf
+build_volume: skillbox-build-volume
+nginx_conf_volume: nginx-conf-volume
 nginx_image: nginx:stable
 nginx_container_name: nginx-server
