@@ -1,14 +1,13 @@
 ---
 
 stages:
-  - test
   - build
   - deploy
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
-build_node_skillbox:
+build_image:
   stage: build
   tags:
     - docker
@@ -17,8 +16,21 @@ build_node_skillbox:
     - docker:20.10.16-dind
   script:
     - docker login --username ${DOCKER_HUB_LOGIN} --password ${DOCKER_HUB_TOKEN}
-    - docker build --tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} .
+    - docker build --tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} --build-arg BUILD_NUMBER=${CI_PIPELINE_IID} .
     - docker tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
     - docker push ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+
+extract_build:
+  stage: deploy
+  tags:
+    - linux
+  script:
+    - docker pull ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
+    - docker run --rm --detach --name ${CI_PROJECT_NAME}-${CI_PIPELINE_IID} ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
+    - docker cp ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}:/src/node-skillbox/build-${CI_PIPELINE_IID} /etc/node-skillbox-build/
+    - docker stop ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}
+    - docker rmi ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'

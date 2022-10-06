@@ -5,5 +5,6 @@ RUN yarn install
 RUN yarn build
 
 FROM alpine:latest
-COPY --from=builder /src/node-skillbox/build /src/node-skillbox/build
-CMD ["ls", "/src/node-skillbox/build"]
+ARG BUILD_NUMBER
+COPY --from=builder /src/node-skillbox/build /src/node-skillbox/build-${BUILD_NUMBER}
+CMD ["sleep", "infinity"]
