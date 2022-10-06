@@ -7,6 +7,7 @@ stages:
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
+  BUILD_VERSION: "test"
 
 build_node_skillbox:
   stage: build
@@ -17,5 +18,9 @@ build_node_skillbox:
     - docker:20.10.16-dind
   script:
     - docker login --username ${DOCKER_HUB_LOGIN} --password ${DOCKER_HUB_TOKEN}
+    - docker build --tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} --file Dockerfile
+    - docker ps
+    - docker tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
+    - docker push ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
