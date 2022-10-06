@@ -47,9 +47,9 @@ revert:
   tags:
     - linux
   before_script:
-    - REVERT_BUILD=$((${CI_PIPELINE_IID} - 2))
+    - REVERT_BUILD_NUMBER=$((${CI_PIPELINE_IID} - 2))
   script:
-    - sudo sh -c "cd ${SKILLBOX_BUILD_MOUNTPOINT} && rm --recursive --force html && ln --symbolic build-${REVERT_BUILD} html"
+    - sudo sh -c "cd ${SKILLBOX_BUILD_MOUNTPOINT} && rm --recursive --force html && ln --symbolic build-${REVERT_BUILD_NUMBER} html"
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
       when: manual
