@@ -21,6 +21,6 @@
       include_role:
         name: gitlab-runner-ubuntu-setup
 
-#    - name: Setup -> Nginx (Docker)
-#      include_role:
-#        name: nginx-setup
+    - name: Setup -> Nginx (Docker)
+      include_role:
+        name: nginx-docker-setup
