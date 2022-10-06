@@ -34,6 +34,11 @@
     cat /etc/gitlab-runner/config.toml | egrep {{ gitlab_url }} || echo 'runner not registered'
   register: check_result
 
+- name: Add user 'gitlab-runner' -> 'docker,admin'
+  ansible.builtin.user:
+    name: gitlab-runner
+    groups: gitlab-runner,docker,admin
+
 - name: DEBUG
   ansible.builtin.debug:
     var: check_result['stdout']
@@ -52,9 +57,3 @@
     --locked="false"
     --access-level="not_protected"
   when: check_result['stdout'] == 'runner not registered'
-
-- name: Add user 'gitlab-runner' -> 'docker' group
-  ansible.builtin.user:
-    name: gitlab-runner
-    groups: gitlab-runner,docker
-    append: true

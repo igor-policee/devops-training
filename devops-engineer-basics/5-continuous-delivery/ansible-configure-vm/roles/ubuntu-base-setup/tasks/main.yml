@@ -1,6 +1,6 @@
 ---
 
-- name: Configure -> ssh
+- name: Configure -> /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "{{ item.old_line }}"
@@ -10,6 +10,12 @@
     - { old_line: "^#ClientAliveCountMax", new_line: "ClientAliveCountMax 10" }
   notify:
     Restart service -> sshd
+
+- name: Configure -> /etc/sudoers
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: "^%admin ALL=(ALL) ALL"
+    line: "%admin ALL=(ALL) NOPASSWD: ALL"
 
 - name: Update all packages
   ansible.builtin.apt:
@@ -31,6 +37,4 @@
     dest: /usr/local/bin/docker-compose
     mode: u+x,g+x
 
-#- name: Install oh-my-zsh via curl
-#  ansible.builtin.shell: >-
-#    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#admin ALL=(ALL) NOPASSWD: ALL
