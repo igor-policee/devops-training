@@ -5,21 +5,17 @@ stages:
   - build
   - deploy
 
-image: docker:20.10.16
-
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
 
-services:
-  - docker:20.10.16-dind
-
-before_script:
-  - docker info
-
 build_node_skillbox:
   stage: build
+  tags:
+    - docker
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
   script:
-    - docker build -t node-skillbox:test .
-#    - docker push -> gitlab registry
+    - docker login --username ${DOCKER_HUB_LOGIN} --password ${DOCKER_HUB_TOKEN}
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
