@@ -3,13 +3,17 @@
 stages:
   - build
   - deploy
+  - revert
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  NGINX_CONF_MOUNTPOINT: /var/lib/docker/volumes/nginx-conf-volume/_data
+  SKILLBOX_BUILD_MOUNTPOINT: /var/lib/docker/volumes/skillbox-build-volume/_data
 
 build_image:
   stage: build
   tags:
     - docker
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
   image: docker:20.10.16
   services:
     - docker:20.10.16-dind
@@ -26,19 +30,26 @@ deploy_to_nginx:
   stage: deploy
   tags:
     - linux
-  variables:
-    NGINX_CONF_MOUNTPOINT: /var/lib/docker/volumes/nginx-conf-volume/_data
-    SKILLBOX_BUILD_MOUNTPOINT: /var/lib/docker/volumes/skillbox-build-volume/_data
-
   before_script:
     - docker pull ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
-
   script:
     - docker run --rm --detach --name ${CI_PROJECT_NAME}-${CI_PIPELINE_IID} ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
-    - docker cp ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}:/src/node-skillbox/build-${CI_PIPELINE_IID} ${SKILLBOX_BUILD_MOUNTPOINT}
+    - sudo docker cp ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}:/src/node-skillbox/build-${CI_PIPELINE_IID} ${SKILLBOX_BUILD_MOUNTPOINT}
+    - sudo sh -c "cd ${SKILLBOX_BUILD_MOUNTPOINT} && rm --recursive --force html && ln --symbolic build-${CI_PIPELINE_IID} html"
   after_script:
     - docker stop ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}
     - docker rmi ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
-    - docker volume prune --force
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
+
+revert:
+  stage: revert
+  tags:
+    - linux
+  before_script:
+    - REVERT_BUILD=$((${CI_PIPELINE_IID} - 2))
+  script:
+    - sudo sh -c "cd ${SKILLBOX_BUILD_MOUNTPOINT} && rm --recursive --force html && ln --symbolic build-${REVERT_BUILD} html"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: manual
