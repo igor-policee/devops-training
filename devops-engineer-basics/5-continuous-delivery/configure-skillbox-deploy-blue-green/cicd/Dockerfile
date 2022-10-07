@@ -1,6 +1,6 @@
 FROM node:14.15.0-stretch AS builder
 WORKDIR /src/node-skillbox
-COPY . .
+COPY ../../configure-react-app .
 RUN yarn install
 RUN yarn build
 

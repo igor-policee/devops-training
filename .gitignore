@@ -1,5 +1,5 @@
 /.idea/
 /.venv/
 /.git/
-devops-engineer-basics/5-continuous-delivery/ansible-configure-vm/.ansible-vault-pass.txt
-devops-engineer-basics/5-continuous-delivery/ansible-configure-vm/hosts
+devops-engineer-basics/5-continuous-delivery/configure-skillbox-deploy-blue-green/ansible-config-management/.ansible-vault-pass.txt
+devops-engineer-basics/5-continuous-delivery/configure-skillbox-deploy-blue-green/ansible-config-management/hosts
