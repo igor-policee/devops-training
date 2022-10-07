@@ -10,7 +10,7 @@ variables:
   NGINX_CONF_MOUNTPOINT: /var/lib/docker/volumes/nginx-conf-volume/_data
   SKILLBOX_BUILD_MOUNTPOINT: /var/lib/docker/volumes/skillbox-build-volume/_data
 
-build_prod:
+build_image:
   stage: build
   tags:
     - docker
@@ -30,7 +30,7 @@ build_prod:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
 
-deploy_nginx_prod:
+deploy_production:
   stage: deploy
   tags:
     - linux
