@@ -14,7 +14,7 @@
 
 - name: Run docker container
   community.docker.docker_container:
-    name: "{{ nginx_container_name }}"
+    name: "{{ nginx_staging_cont_name }}"
     image: "{{ nginx_image }}"
     restart: false
     restart_policy: always
@@ -22,4 +22,4 @@
       - "{{ build_volume }}:/usr/share/nginx"
       - "{{ nginx_conf_volume }}:/etc/nginx"
     ports:
-      - "80:80"
+      - "{{ nginx_staging_port }}:80"
