@@ -4,6 +4,6 @@ build_volume: skillbox-build-volume
 nginx_conf_volume: nginx-conf-volume
 nginx_image: nginx:stable
 nginx_staging_cont_name: nginx-staging-server
-nginx_staging_port: "8888"
+nginx_staging_port: "81"
 nginx_prod_cont_name: nginx-prod-server
 nginx_prod_port: "80"
