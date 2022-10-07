@@ -11,6 +11,11 @@
   notify:
     Restart service -> sshd
 
+- name: Add group -> 'admin'
+  ansible.builtin.group:
+    name: admin
+    state: present
+
 - name: Configure -> /etc/sudoers
   ansible.builtin.lineinfile:
     path: /etc/sudoers

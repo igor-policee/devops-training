@@ -24,7 +24,7 @@ build_prod:
   before_script:
     - docker login --username ${DOCKER_HUB_LOGIN} --password ${DOCKER_HUB_TOKEN}
   script:
-    - docker build --tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} --build-arg BUILD_NUMBER=${CI_PIPELINE_IID} .
+    - docker build --tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} --build-arg BUILD_NUMBER=${CI_PIPELINE_IID} --build-arg CI_PROJECT_NAME=${CI_PROJECT_NAME} .
     - docker tag ${CI_PROJECT_NAME}:${CI_PIPELINE_IID} ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
     - docker push ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
   rules:
@@ -38,7 +38,7 @@ deploy_nginx_prod:
     - docker pull ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
   script:
     - docker run --rm --detach --name ${CI_PROJECT_NAME}-${CI_PIPELINE_IID} ${DOCKER_HUB_LOGIN}/${CI_PROJECT_NAME}:${CI_PIPELINE_IID}
-    - sudo docker cp ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}:/src/node-skillbox/build-${CI_PIPELINE_IID} ${SKILLBOX_BUILD_MOUNTPOINT}
+    - sudo docker cp ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}:/src/${CI_PROJECT_NAME}/build-${CI_PIPELINE_IID} ${SKILLBOX_BUILD_MOUNTPOINT}
     - sudo sh -c "cd ${SKILLBOX_BUILD_MOUNTPOINT} && rm --recursive --force html && ln --symbolic build-${CI_PIPELINE_IID} html"
   after_script:
     - docker stop ${CI_PROJECT_NAME}-${CI_PIPELINE_IID}
