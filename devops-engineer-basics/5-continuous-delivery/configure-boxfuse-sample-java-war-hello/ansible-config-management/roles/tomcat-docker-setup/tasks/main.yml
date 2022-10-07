@@ -1,0 +1,25 @@
+---
+
+- name: "Create volume -> {{ build_volume }}, {{ tomcat_conf_volume }}"
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  loop:
+    - "{{ build_volume }}"
+    - "{{ tomcat_conf_volume }}"
+
+- name: "Pull docker image -> {{ tomcat_image }}"
+  community.docker.docker_image:
+    name: "{{ tomcat_image }}"
+    source: pull
+
+- name: "Run docker container -> {{ tomcat_staging_cont_name }}"
+  community.docker.docker_container:
+    name: "{{ tomcat_staging_cont_name }}"
+    image: "{{ tomcat_image }}"
+    restart: false
+    restart_policy: always
+    volumes:
+      - "{{ build_volume }}:/usr/local/tomcat/webapps"
+      - "{{ tomcat_conf_volume }}:/usr/local/tomcat/conf"
+    ports:
+      - "{{ tomcat_staging_port }}:8080"

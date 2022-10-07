@@ -1,0 +1,7 @@
+---
+
+build_volume: boxfuse-build-volume
+tomcat_conf_volume: tomcat-conf-volume
+tomcat_image: "tomcat:9.0"
+tomcat_staging_cont_name: tomcat-staging-server
+tomcat_staging_port: "8081"
