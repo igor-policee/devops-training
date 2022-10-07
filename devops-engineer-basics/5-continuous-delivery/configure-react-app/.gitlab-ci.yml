@@ -10,13 +10,17 @@ variables:
   NGINX_CONF_MOUNTPOINT: /var/lib/docker/volumes/nginx-conf-volume/_data
   SKILLBOX_BUILD_MOUNTPOINT: /var/lib/docker/volumes/skillbox-build-volume/_data
 
-build_image:
+build_prod:
   stage: build
   tags:
     - docker
   image: docker:20.10.16
   services:
     - docker:20.10.16-dind
+  variables:
+  # REACT_APP_WEBSITE_PREFIX: ${CI_COMMIT_BRANCH}
+  # REACT_APP_BUILD_NUMBER: ${CI_PIPELINE_IID}
+
   before_script:
     - docker login --username ${DOCKER_HUB_LOGIN} --password ${DOCKER_HUB_TOKEN}
   script:
@@ -26,7 +30,7 @@ build_image:
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
 
-deploy_to_nginx:
+deploy_nginx_prod:
   stage: deploy
   tags:
     - linux
@@ -47,7 +51,7 @@ revert:
   tags:
     - linux
   before_script:
-    - REVERT_BUILD_NUMBER=$((${CI_PIPELINE_IID} - 2))
+    - export REVERT_BUILD_NUMBER=$((${CI_PIPELINE_IID} - 2))
   script:
     - sudo sh -c "cd ${SKILLBOX_BUILD_MOUNTPOINT} && rm --recursive --force html && ln --symbolic build-${REVERT_BUILD_NUMBER} html"
   rules:
