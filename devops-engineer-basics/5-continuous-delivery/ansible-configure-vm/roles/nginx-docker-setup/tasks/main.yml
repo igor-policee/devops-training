@@ -7,12 +7,12 @@
     - "{{ build_volume }}"
     - "{{ nginx_conf_volume }}"
 
-- name: Pull docker image
+- name: "Pull docker image -> {{ nginx_image }}"
   community.docker.docker_image:
     name: "{{ nginx_image }}"
     source: pull
 
-- name: Run docker container
+- name: "Run docker container -> {{ nginx_staging_cont_name }}"
   community.docker.docker_container:
     name: "{{ nginx_staging_cont_name }}"
     image: "{{ nginx_image }}"

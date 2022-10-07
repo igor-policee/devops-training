@@ -19,16 +19,16 @@
       - /var/run/docker.sock:/var/run/docker.sock
       - "{{ gitlab_runner_volume }}:/etc/gitlab-runner"
 
-- name: "Check GitLab Runner registration -> {{ gitlab_runner_name }} (Docker)"
+- name: "Check GitLab Runner registration (base: docker, executor: docker)"
   ansible.builtin.shell: |-
     docker exec -ti {{ gitlab_runner_name }} cat /etc/gitlab-runner/config.toml | egrep {{ gitlab_url }} || echo 'runner not registered'
   register: check_result
 
-- name: DEBUG
+- name: "Result -> Check GitLab Runner registration (base: docker, executor: docker)"
   ansible.builtin.debug:
     var: check_result['stdout']
 
-- name: "Register GitLab Runner -> {{ gitlab_runner_name }} (Docker)"
+- name: "Register GitLab Runner (base: docker, executor: docker)"
   community.docker.docker_container_exec:
     container: "{{ gitlab_runner_name }}"
     command: >-

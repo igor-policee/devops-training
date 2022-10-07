@@ -29,21 +29,21 @@
 
   when: "'gitlab-runner' not in ansible_facts.packages"
 
-- name: Check GitLab Runner registration (Linux)
-  ansible.builtin.shell: |-
-    cat /etc/gitlab-runner/config.toml | egrep {{ gitlab_url }} || echo 'runner not registered'
-  register: check_result
-
-- name: Add user 'gitlab-runner' -> 'docker,admin'
+- name: Add user 'gitlab-runner' -> 'docker,admin' groups
   ansible.builtin.user:
     name: gitlab-runner
     groups: gitlab-runner,docker,admin
 
-- name: DEBUG
+- name: "Check GitLab Runner registration (base: ubuntu, executor: shell)"
+  ansible.builtin.shell: |-
+    cat /etc/gitlab-runner/config.toml | egrep {{ gitlab_url }} || echo 'runner not registered'
+  register: check_result
+
+- name: "Result -> Check GitLab Runner registration (base: ubuntu, executor: shell)"
   ansible.builtin.debug:
     var: check_result['stdout']
 
-- name: Register GitLab Runner (Linux)
+- name: "Register GitLab Runner (base: ubuntu, executor: shell)"
   ansible.builtin.shell: >-
     gitlab-runner register
     --non-interactive
