@@ -1,0 +1,15 @@
+---
+
+nginx_image: nginx:stable
+
+# staging
+build_volume_staging: build-volume-staging
+nginx_conf_volume_staging: nginx-conf-volume-staging
+nginx_cont_name_staging: nginx-server-staging
+nginx_port_staging: 81
+
+# production
+build_volume_prod: build-volume-prod
+nginx_conf_volume_prod: nginx-conf-volume-prod
+nginx_cont_name_prod: nginx-server-prod
+nginx_port_prod: 80

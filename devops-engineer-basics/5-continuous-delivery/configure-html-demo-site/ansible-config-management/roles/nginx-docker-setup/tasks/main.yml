@@ -1,0 +1,37 @@
+---
+
+- name: "Pull docker image -> {{ nginx_image }}"
+  community.docker.docker_image:
+    name: "{{ nginx_image }}"
+    source: pull
+
+- name: "Create volume -> {{ build_volume_staging }}, {{ nginx_conf_volume_staging }}, {{ build_volume_prod }}, {{ nginx_conf_volume_prod }}"
+  community.docker.docker_volume:
+    name: "{{ item }}"
+  loop:
+    - "{{ build_volume_staging }}"
+    - "{{ nginx_conf_volume_staging }}"
+    - "{{ build_volume_prod }}"
+    - "{{ nginx_conf_volume_prod }}"
+
+- name: "Run docker container -> {{ nginx_cont_name_staging }}, {{ nginx_cont_name_prod }}"
+  community.docker.docker_container:
+    name: "{{ item.nginx_cont_name }}"
+    image: "{{ nginx_image }}"
+    restart: false
+    restart_policy: always
+    volumes:
+      - "{{ item.build_volume }}:/usr/share/nginx"
+      - "{{ item.nginx_conf_volume }}:/etc/nginx"
+    ports:
+      - "{{ item.nginx_port }}:80"
+  loop:
+    - { nginx_cont_name: "{{ nginx_cont_name_staging }}",
+        build_volume: "{{ build_volume_staging }}",
+        nginx_conf_volume: "{{ nginx_conf_volume_staging }}",
+        nginx_port: "{{ nginx_port_staging }}" }
+
+    - { nginx_cont_name: "{{ nginx_cont_name_prod }}",
+        build_volume: "{{ build_volume_prod }}",
+        nginx_conf_volume: "{{ nginx_conf_volume_prod }}",
+        nginx_port: "{{ nginx_port_prod }}" }
