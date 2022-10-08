@@ -3,5 +3,5 @@
 /.git/
 devops-engineer-basics/5-continuous-delivery/configure-skillbox-deploy-blue-green/ansible-config-management/.ansible-vault-pass.txt
 devops-engineer-basics/5-continuous-delivery/configure-skillbox-deploy-blue-green/ansible-config-management/hosts
-devops-engineer-basics/5-continuous-delivery/configure-boxfuse-sample-java-war-hello/ansible-config-management/.ansible-vault-pass.txt
-devops-engineer-basics/5-continuous-delivery/configure-boxfuse-sample-java-war-hello/ansible-config-management/hosts
+devops-engineer-basics/5-continuous-delivery/configure-html-demo-site/ansible-config-management/.ansible-vault-pass.txt
+devops-engineer-basics/5-continuous-delivery/configure-html-demo-site/ansible-config-management/hosts
