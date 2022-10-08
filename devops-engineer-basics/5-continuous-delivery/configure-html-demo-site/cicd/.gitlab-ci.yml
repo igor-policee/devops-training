@@ -4,14 +4,45 @@ stages:
   - test
   - build
   - deploy
+  - cleanup
 
 variables:
   BUILD_MOUNTPOINT_STAGING: /var/lib/docker/volumes/build-volume-staging/_data
   BUILD_MOUNTPOINT_PROD: /var/lib/docker/volumes/build-volume-prod/_data
 
-print_variables:
-  stage: test
+deploy_staging:
+  stage: deploy
+  tags:
+    - linux
+  variables:
+    ENV: staging
+    REPLACE_TEMPLATE: "<p style=\"font-size:30px; color: white;\"><em> BUILD # ${CI_PIPELINE_IID}</em></p>"
+  before_script:
+    - sed -i '30d' index.html && sed -i "30i${REPLACE_TEMPLATE}" index.html
+  script:
+    - sudo mkdir ${BUILD_MOUNTPOINT_STAGING}/build-${CI_PIPELINE_IID}
+    - sudo cp --recursive * ${BUILD_MOUNTPOINT_STAGING}/build-${CI_PIPELINE_IID}/
+    - sudo sh -c "cd ${BUILD_MOUNTPOINT_STAGING} && rm --recursive --force html && ln --symbolic build-${CI_PIPELINE_IID} html"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+
+cleanup_builds:
+  stage: cleanup
   tags:
     - linux
   script:
-    - export
+    # Remove builds older than the last three builds
+    - |-
+      BUILD_LIST=$(sudo find ${BUILD_MOUNTPOINT_STAGING} -name build-* | sudo sort -r)
+      counter=0
+      for build in ${BUILD_LIST}
+      do
+        counter=$((${counter} + 1))
+        if [ ${counter} -gt 3 ]
+        then
+          sudo rm --recursive --force ${build}  # fix sorting
+        fi
+      done
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      when: manual
