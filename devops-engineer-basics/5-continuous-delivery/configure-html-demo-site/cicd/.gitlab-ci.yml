@@ -1,0 +1,17 @@
+---
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  BUILD_MOUNTPOINT_STAGING: /var/lib/docker/volumes/build-volume-staging/_data
+  BUILD_MOUNTPOINT_PROD: /var/lib/docker/volumes/build-volume-prod/_data
+
+print_variables:
+  stage: test
+  tags:
+    - linux
+  script:
+    - export
