@@ -1,7 +1,0 @@
----
-
-gitlab_url: https://gitlab.skillbox.ru/
-gitlab_reg_token: igYrtDC8Lk_Po4pE3d9G
-gitlab_runner_name: runner-vm-build-02
-gitlab_runner_volume: gitlab-runner-volume
-gitlab_runner_image: gitlab/gitlab-runner:latest
