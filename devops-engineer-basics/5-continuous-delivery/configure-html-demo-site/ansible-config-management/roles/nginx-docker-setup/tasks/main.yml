@@ -5,13 +5,12 @@
     name: "{{ nginx_image }}"
     source: pull
 
-- name: "Create volume -> {{ build_volume_staging }}, {{ nginx_conf_volume_staging }}, {{ build_volume_prod }}, {{ nginx_conf_volume_prod }}"
+- name: "Create volume -> {{ build_volume }}, {{ nginx_conf_volume_staging }}, {{ nginx_conf_volume_prod }}"
   community.docker.docker_volume:
     name: "{{ item }}"
   loop:
-    - "{{ build_volume_staging }}"
+    - "{{ build_volume }}"
     - "{{ nginx_conf_volume_staging }}"
-    - "{{ build_volume_prod }}"
     - "{{ nginx_conf_volume_prod }}"
 
 - name: "Run docker container -> {{ nginx_cont_name_staging }}, {{ nginx_cont_name_prod }}"
@@ -21,17 +20,34 @@
     restart: false
     restart_policy: always
     volumes:
-      - "{{ item.build_volume }}:/usr/share/nginx"
-      - "{{ item.nginx_conf_volume }}:/etc/nginx"
+      - "{{ item.build_volume }}:/usr/share/nginx:ro"
+      - "{{ item.nginx_conf_volume }}:/etc/nginx:ro"
     ports:
       - "{{ item.nginx_port }}:80"
   loop:
     - { nginx_cont_name: "{{ nginx_cont_name_staging }}",
-        build_volume: "{{ build_volume_staging }}",
+        build_volume: "{{ build_volume }}",
         nginx_conf_volume: "{{ nginx_conf_volume_staging }}",
         nginx_port: "{{ nginx_port_staging }}" }
 
     - { nginx_cont_name: "{{ nginx_cont_name_prod }}",
-        build_volume: "{{ build_volume_prod }}",
+        build_volume: "{{ build_volume }}",
         nginx_conf_volume: "{{ nginx_conf_volume_prod }}",
         nginx_port: "{{ nginx_port_prod }}" }
+
+- name: Replace configuration files -> Nginx (staging, prod)
+  ansible.builtin.template:
+    src: "./default-{{ item.env }}.conf.j2"
+    dest: "/var/lib/docker/volumes/{{ item.nginx_conf_volume }}/_data/conf.d/default-{{ item.env }}.conf"
+    mode: 0644
+  loop:
+    - { env: staging, nginx_conf_volume: "{{ nginx_conf_volume_staging }}" }
+    - { env: prod, nginx_conf_volume: "{{ nginx_conf_volume_prod }}" }
+
+- name: Remove default configuration
+  ansible.builtin.file:
+    path: "/var/lib/docker/volumes/{{ item }}/_data/conf.d/default.conf"
+    state: absent
+  loop:
+    - "{{ nginx_conf_volume_staging }}"
+    - "{{ nginx_conf_volume_prod }}"

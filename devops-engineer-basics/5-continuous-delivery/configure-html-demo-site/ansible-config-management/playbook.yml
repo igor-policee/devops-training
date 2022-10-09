@@ -8,15 +8,11 @@
         name: ubuntu-base-setup
       when: ansible_distribution == 'Ubuntu'
 
-    #    - name: "Base configure -> {{ ansible_distribution }}"
-    #      include_role:
-    #        name: centos-base-setup
-    #      when: ansible_distribution == 'CentOS'
-    #
-    #    - name: "Setup -> GitLab Runner (base: docker, executor: docker)"
-    #      include_role:
-    #        name: gitlab-runner-docker-setup
-    #
+    - name: "Base configure -> {{ ansible_distribution }}"
+      include_role:
+        name: centos-base-setup
+      when: ansible_distribution == 'CentOS'
+
     - name: "Setup -> GitLab Runner (base: ubuntu, executor: shell)"
       include_role:
         name: gitlab-runner-ubuntu-setup
