@@ -1,0 +1,11 @@
+---
+
+- name: Restart container -> nginx
+  community.docker.docker_container:
+    name: "{{ item}}"
+    image: "{{ nginx_image }}"
+    state: started
+    restart: true
+  loop:
+    - "{{ nginx_cont_name_staging }}"
+    - "{{ nginx_cont_name_prod }}"

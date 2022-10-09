@@ -43,6 +43,8 @@
   loop:
     - { env: staging, nginx_conf_volume: "{{ nginx_conf_volume_staging }}" }
     - { env: prod, nginx_conf_volume: "{{ nginx_conf_volume_prod }}" }
+  notify:
+    Restart container -> nginx
 
 - name: Remove default configuration
   ansible.builtin.file:
