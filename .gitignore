@@ -5,6 +5,7 @@ devops-engineer-basics/5-continuous-delivery/configure-skillbox-deploy-blue-gree
 devops-engineer-basics/5-continuous-delivery/configure-skillbox-deploy-blue-green/ansible-config-management/hosts
 devops-engineer-basics/5-continuous-delivery/configure-html-demo-site/ansible-config-management/.ansible-vault-pass.txt
 devops-engineer-basics/5-continuous-delivery/configure-html-demo-site/ansible-config-management/hosts
-devops-engineer-basics/6-infrastructure-as-code/terraform-yc/terraform*
-devops-engineer-basics/6-infrastructure-as-code/terraform-yc/.terraform*
-devops-engineer-basics/6-infrastructure-as-code/terraform-yc/*.tfvars
+devops-engineer-basics/6-infrastructure-as-code/terraform-config/terraform*
+devops-engineer-basics/6-infrastructure-as-code/terraform-config/.terraform*
+devops-engineer-basics/6-infrastructure-as-code/terraform-config/terraform.tfvars
+devops-engineer-basics/6-infrastructure-as-code/ansible-config/hosts
