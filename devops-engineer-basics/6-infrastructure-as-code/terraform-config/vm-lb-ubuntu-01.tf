@@ -1,5 +1,5 @@
 resource "yandex_compute_instance" "vm-lb-ubuntu-01" {
-  name = "vm-yc-lb-ubuntu-01"
+  name = "vm-lb-ubuntu-01"
 
   resources {
     cores         = 2
