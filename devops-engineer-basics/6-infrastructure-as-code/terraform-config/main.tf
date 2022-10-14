@@ -14,48 +14,26 @@ provider "yandex" {
   zone      = var.zone
 }
 
-resource "yandex_compute_instance" "vm-yc-ubuntu-01" {
-  name = "vm-yc-ubuntu-01"
-
-  resources {
-    cores         = 2
-    memory        = 2
-    core_fraction = 20
-  }
-
-  boot_disk {
-    initialize_params {
-      image_id = var.ubuntu_image_id
-      size     = var.disk_size
-      type     = var.disk_type
-    }
-  }
-
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
-  }
-
-  metadata = {
-    ssh-keys = "ubuntu:${file(var.ssh_public_key)}"
-  }
+output "internal_ip_address_vm-lb-ubuntu-01" {
+  value = yandex_compute_instance.vm-lb-ubuntu-01.network_interface.0.ip_address
 }
 
-resource "yandex_vpc_network" "network-1" {
-  name = "network-1"
+output "internal_ip_address_vm-instance-ubuntu-01" {
+  value = yandex_compute_instance.vm-instance-ubuntu-01.network_interface.0.ip_address
 }
 
-resource "yandex_vpc_subnet" "subnet-1" {
-  name           = "subnet-1"
-  zone           = var.zone
-  network_id     = yandex_vpc_network.network-1.id
-  v4_cidr_blocks = ["192.168.0.0/24"]
+output "internal_ip_address_vm-instance-ubuntu-02" {
+  value = yandex_compute_instance.vm-instance-ubuntu-02.network_interface.0.ip_address
 }
 
-output "internal_ip_address_vm_1" {
-  value = yandex_compute_instance.vm-yc-ubuntu-01.network_interface.0.ip_address
+output "external_ip_address_vm-lb-ubuntu-01" {
+  value = yandex_compute_instance.vm-lb-ubuntu-01.network_interface.0.nat_ip_address
 }
 
-output "external_ip_address_vm_1" {
-  value = yandex_compute_instance.vm-yc-ubuntu-01.network_interface.0.nat_ip_address
+output "external_ip_address_vm-instance-ubuntu-01" {
+  value = yandex_compute_instance.vm-instance-ubuntu-01.network_interface.0.nat_ip_address
+}
+
+output "external_ip_address_vm-instance-ubuntu-02" {
+  value = yandex_compute_instance.vm-instance-ubuntu-02.network_interface.0.nat_ip_address
 }

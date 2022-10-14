@@ -1,0 +1,5 @@
+---
+
+upstream_name: react_app
+internal_ip_address_vm_01: "192.168.0.18"
+internal_ip_address_vm_02: "192.168.0.6"

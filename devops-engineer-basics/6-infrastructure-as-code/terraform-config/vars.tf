@@ -5,19 +5,19 @@ variable "zone" {
 variable "yandex-token" {
   type        = string
   description = "Yandex Cloud security OAuth token"
-  default     = "Hidden var in .tfvars file"
+  default     = "Hidden var in terraform.tfvars file"
 }
 
 variable "yandex-cloud-id" {
   type        = string
   description = "Yandex Cloud ID"
-  default     = "Hidden var in .tfvars file"
+  default     = "Hidden var in terraform.tfvars file"
 }
 
 variable "yandex-folder-id" {
   type        = string
   description = "Yandex Cloud Folder ID"
-  default     = "Hidden var in .tfvars file"
+  default     = "Hidden var in terraform.tfvars file"
 }
 
 variable "disk_size" {

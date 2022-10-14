@@ -1,0 +1,75 @@
+---
+
+- name: Check for file availability -> /usr/bin/node
+  ansible.builtin.stat:
+    path: /usr/bin/node
+  register: check_node_result
+
+- block:
+    - name: Download and execute -> NodeSource installation script
+      ansible.builtin.shell: >-
+        curl -sL https://deb.nodesource.com/setup_{{ node_major_version }}.x | sudo -E bash -
+      args:
+        executable: /bin/bash
+
+    - name: Install -> Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: latest
+        update_cache: true
+
+  when: not check_node_result.stat.exists
+
+- name: Check for file availability -> /usr/bin/yarn
+  ansible.builtin.stat:
+    path: /usr/bin/yarn
+  register: check_yarn_result
+
+- name: Install -> Yarn
+  ansible.builtin.shell: >-
+    npm install -g yarn
+  when: not check_yarn_result.stat.exists
+
+- name: Install -> Git
+  ansible.builtin.apt:
+    name: git
+    state: latest
+    update_cache: true
+
+- name: Clone repository -> https://gitlab.com/entsupml/skillbox-deploy-blue-green.git
+  ansible.builtin.git:
+    repo: https://gitlab.com/entsupml/skillbox-deploy-blue-green.git
+    dest: /src/react-app
+    single_branch: yes
+    version: master
+
+- name: Yarn -> install packages, build /src/react-app/build
+  ansible.builtin.shell: >-
+    yarn install
+    && yarn build
+  args:
+    chdir: /src/react-app
+    creates: /src/react-app/build
+    executable: /bin/bash
+  environment:
+    REACT_APP_WEBSITE_PREFIX: "{{ react_app_prefix }}"
+
+- name: Install -> Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+    update_cache: true
+
+- name: Copy build -> /var/www/react-app
+  ansible.builtin.shell: >-
+    cp -RT /src/react-app/build /var/www/react-app
+  args:
+    creates: /var/www/react-app/index.html
+    executable: /bin/bash
+
+- name: Configure -> Nginx configuration
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/sites-available/default
+    regexp: "root /var/www/html;"
+    line: "        root /var/www/react-app;"
+  notify: Restart, enable service -> Nginx
