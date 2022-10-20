@@ -5,7 +5,7 @@
   tasks:
     - name: Configuring -> 'frontend_servers'
       include_role:
-        name: 1-frontend-servers
+        name: 1-frontend
       when: ansible_distribution == 'Ubuntu'
 
 - hosts: load_balancer

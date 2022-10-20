@@ -1,0 +1,9 @@
+---
+
+- hosts: vagrant_servers
+  become: true
+  tasks:
+    - name: Configuring -> 'frontend_servers'
+      include_role:
+        name: 1-frontend
+      when: ansible_distribution == 'Ubuntu'
