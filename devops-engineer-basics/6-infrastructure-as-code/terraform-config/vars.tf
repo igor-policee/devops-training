@@ -20,6 +20,21 @@ variable "yandex-folder-id" {
   default     = "Hidden var in terraform.tfvars file"
 }
 
+variable "cores" {
+  type    = string
+  default = "2"
+}
+
+variable "memory" {
+  type    = string
+  default = "2"
+}
+
+variable "core_fraction" {
+  type    = string
+  default = "20"
+}
+
 variable "disk_size" {
   type    = string
   default = "25"
