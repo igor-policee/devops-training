@@ -9,3 +9,4 @@ devops-engineer-basics/6-infrastructure-as-code/terraform-config/terraform*
 devops-engineer-basics/6-infrastructure-as-code/terraform-config/.terraform*
 devops-engineer-basics/6-infrastructure-as-code/terraform-config/terraform.tfvars
 devops-engineer-basics/6-infrastructure-as-code/ansible-config/hosts
+devops-engineer-basics/7-virtualization/terraform-config/terraform.tfvars
