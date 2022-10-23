@@ -1,1 +1,0 @@
-../../6-infrastructure-as-code/terraform-config/network.tf
