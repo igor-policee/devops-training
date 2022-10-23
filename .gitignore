@@ -6,3 +6,4 @@ hosts.ini
 *.tfvars
 terraform*
 .ansible-vault-pass.txt
+.vagrant
