@@ -1,6 +1,6 @@
 ---
 
-- hosts: frontend_servers
+- hosts: all
   become: true
   tasks:
     - name: Configuring -> 'frontend_servers'
