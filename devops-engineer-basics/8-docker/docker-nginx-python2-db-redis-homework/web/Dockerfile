@@ -1,6 +1,7 @@
 FROM python:2.7-stretch
-USER root
+
 # uWSGI:
+USER root
 RUN pip install uwsgi
 # Copy the base uWSGI ini file to enable default dynamic uwsgi process number
 COPY ./uwsgi.ini /etc/uwsgi/
@@ -16,14 +17,14 @@ ARG INSTALL_CRON=false
 RUN if [ ${INSTALL_CRON} = true ]; then \
     apt-get update -yqq ; \
     apt-get -y install cron \
-;fi
+    ;fi
 # SUPERVISOR:
 USER root
 ARG INSTALL_SUPERVISOR=false
 RUN if [ ${INSTALL_SUPERVISOR} = true ]; then \
     apt-get update -yqq ; \
     apt-get -y install supervisor \
-;fi
+    ;fi
 
 # NPM:
 USER root
@@ -35,27 +36,27 @@ RUN if [ ${INSTALL_NPM} = true ]; then \
     curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - ; \
     apt-get install nodejs npm ; \
     apt-get -y install nodejs \
-;fi
+    ;fi
 
 # GIT:
 USER root
 ARG INSTALL_GIT=false
 RUN if [ ${INSTALL_GIT} = true ]; then \
     apt-get -y install git \
-;fi
+    ;fi
 # ZIP:
 USER root
 ARG INSTALL_ZIP=false
 RUN if [ ${INSTALL_ZIP} = true ]; then \
     apt-get -y install zip unzip \
-;fi
+    ;fi
 
 # Image optimizers:
 USER root
 ARG INSTALL_IMAGE_OPTIMIZERS=false
 RUN if [ ${INSTALL_IMAGE_OPTIMIZERS} = true ]; then \
     apt-get install -y jpegoptim optipng pngquant gifsicle \
-;fi
+    ;fi
 # pgsql client
 ARG INSTALL_PG_CLIENT=false
 RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
@@ -64,7 +65,7 @@ RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
     mkdir -p /usr/share/man/man7 && \
     # Install the pgsql client
     apt-get install -y postgresql-client \
-;fi
+    ;fi
 
 COPY ./requirements.txt /opt/
 RUN pip install -r /opt/requirements.txt
