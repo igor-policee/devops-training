@@ -5,6 +5,7 @@ USER root
 RUN pip install uwsgi
 # Copy the base uWSGI ini file to enable default dynamic uwsgi process number
 COPY ./uwsgi.ini /etc/uwsgi/
+COPY ./wsgi.py /var/www/
 # Which uWSGI .ini file should be used, to make it customizable
 ENV UWSGI_INI /etc/uwsgi/uwsgi.ini
 # By default, run 2 processes
