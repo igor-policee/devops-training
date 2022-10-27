@@ -14,9 +14,9 @@ services:
         - "${NGINX_TODO_HOST_HTTP_PORT}:80"
         - "${NGINX_TODO_HOST_HTTPS_PORT}:443"
       depends_on:
-        - todo
+        - web
       links:
-        - todo 
+        - web 
       networks:
         - frontend
         - backend
@@ -38,7 +38,7 @@ services:
       expose:
         - "9000"
       depends_on:
-        - db
+        - mysql
         - redis
       networks:
         - backend
@@ -60,7 +60,7 @@ services:
       expose:
         - "9000"
       depends_on:
-        - db
+        - mysql
         - redis
       networks:
         - backend
