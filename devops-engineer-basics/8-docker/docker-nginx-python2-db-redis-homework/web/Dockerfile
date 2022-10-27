@@ -59,6 +59,7 @@ RUN if [ ${INSTALL_IMAGE_OPTIMIZERS} = true ]; then \
     apt-get install -y jpegoptim optipng pngquant gifsicle \
     ;fi
 # pgsql client
+USER root
 ARG INSTALL_PG_CLIENT=false
 RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
     # Create folders if not exists (https://github.com/tianon/docker-brew-debian/issues/65)
@@ -73,5 +74,5 @@ RUN pip install -r /opt/requirements.txt
 ARG WORK_DIR=/var/www
 RUN usermod -u 1000 www-data
 WORKDIR ${WORK_DIR}
-CMD [ "uwsgi" ]
+CMD uwsgi --ini /etc/uwsgi/uwsgi.ini
 EXPOSE 9000
