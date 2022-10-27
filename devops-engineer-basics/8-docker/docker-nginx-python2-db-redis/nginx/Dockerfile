@@ -1,6 +1,6 @@
 FROM nginx:alpine
 COPY ./nginx.conf /etc/nginx/
-COPY ./uwsgi_params /etc/nginx
+COPY ./uwsgi_params /etc/nginx/
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from dl-cdn.alpinelinux.org to aliyun source
