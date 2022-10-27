@@ -38,8 +38,8 @@ services:
       - ${APP_CODE_TODO_PATH_HOST}:${APP_CODE_TODO_PATH_CONTAINER}
     ports:
       - "80:9000"
-    # expose:
-      # - "9000"
+    expose:
+      - "9000"
     networks:
       - backend
 
