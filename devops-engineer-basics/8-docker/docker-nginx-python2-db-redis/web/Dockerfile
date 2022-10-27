@@ -69,6 +69,7 @@ RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
 
 COPY ./requirements.txt /opt/
 RUN pip install -r /opt/requirements.txt
-COPY ./run.py /
+WORKDIR /var/www/python_app
+COPY ./run.py ./
 RUN usermod -u 1000 www-data
 CMD [ "uwsgi", "/etc/uwsgi/app.ini" ]
