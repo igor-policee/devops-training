@@ -3,12 +3,14 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get install -y python3 python3-dev python3-pip uwsgi uwsgi-plugin-python3
+    && apt-get install -y python-dev python-pip nginx
 
-COPY ./wsgi.py /var/www/python_app/
+RUN pip install virtualenv
 
-COPY ./python_app.ini /etc/uwsgi/apps-enabled/
+WORKDIR /myapp
 
-CMD [ "systemctl", "enable", "uwsgi;" "systemctl", "restart" "uwsgi" ]
+RUN virtualenv myappenv \
+    && source ./myappenv/bin/activate \
+    && pip install uwsgi
 
-EXPOSE 8080
+CMD [ "uwsgi", "--version" ]
