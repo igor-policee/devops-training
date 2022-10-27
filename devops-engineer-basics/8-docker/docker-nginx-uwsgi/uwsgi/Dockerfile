@@ -18,6 +18,6 @@ RUN netfilter-persistent save
 RUN virtualenv myappenv \
     && source myappenv/bin/activate
 
-RUN uwsgi --socket 0.0.0.0:8080 --protocol=http -w wsgi
+CMD [ "uwsgi", "--socket 0.0.0.0:8080", "--protocol=http", "-w", "wsgi" ]
 
 EXPOSE 8080
