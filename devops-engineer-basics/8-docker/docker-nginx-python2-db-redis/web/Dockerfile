@@ -72,4 +72,4 @@ RUN pip install -r /opt/requirements.txt
 WORKDIR /var/www/python_app
 COPY ./wsgi.py ./
 RUN usermod -u 1000 www-data
-CMD [ "uwsgi", "/etc/uwsgi/app.ini" ]
+CMD uwsgi --ini /etc/uwsgi/app.ini
