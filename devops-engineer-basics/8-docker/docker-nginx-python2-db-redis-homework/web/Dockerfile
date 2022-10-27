@@ -1,4 +1,5 @@
 FROM python:2.7-stretch
+ENV PYTHONUNBUFFERED 1
 
 # uWSGI:
 USER root
@@ -74,5 +75,5 @@ RUN pip install -r /opt/requirements.txt
 ARG WORK_DIR=/var/www
 RUN usermod -u 1000 www-data
 WORKDIR ${WORK_DIR}
-CMD uwsgi --ini /etc/uwsgi/uwsgi.ini
+CMD [ "uwsgi", "--master", "--ini", "${UWSGI_INI}" ]
 EXPOSE 9000
