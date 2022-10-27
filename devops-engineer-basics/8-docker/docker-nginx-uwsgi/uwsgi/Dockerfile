@@ -1,23 +1,12 @@
 FROM ubuntu:20.04
 
 RUN apt-get update \
-    && apt-get install -y python3 python3-dev python3-pip
+    && apt-get install -y python3 python3-dev python3-pip uwsgi uwsgi-plugin-python3
 
-RUN pip3 install virtualenv uwsgi
+COPY ./wsgi.py /var/www/python_app/
 
-WORKDIR /var/www/python_app
+COPY ./python_app.ini /etc/uwsgi/apps-enabled/
 
-COPY ./wsgi.py ./
-
-RUN iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
-
-RUN apt-get install -y iptables-persistent
-
-RUN netfilter-persistent save
-
-RUN virtualenv myappenv \
-    && source myappenv/bin/activate
-
-CMD [ "uwsgi", "--socket 0.0.0.0:8080", "--protocol=http", "-w", "wsgi" ]
+CMD [ "systemctl", "enable", "uwsgi;" "systemctl", "restart" "uwsgi" ]
 
 EXPOSE 8080
