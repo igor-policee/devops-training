@@ -1,6 +1,7 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install python3.7-dev python3-pip
+RUN apt-get update \
+    && apt-get install python3.7-dev python3-pip
 RUN pip3 install uwsgi
 WORKDIR /sites
 COPY ./test.py ./
