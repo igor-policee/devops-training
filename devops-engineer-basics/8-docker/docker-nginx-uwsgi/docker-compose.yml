@@ -2,10 +2,10 @@ version: '3'
 
 services:
   uwsgi:
-    build: 
+    build:
       context: ./uwsgi
     ports:
-      - "8080:8080"
+      - "8000:8000"
     networks:
       - default_network
 
