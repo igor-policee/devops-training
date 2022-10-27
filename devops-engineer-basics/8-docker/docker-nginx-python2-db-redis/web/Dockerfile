@@ -2,10 +2,6 @@ FROM python:2.7-stretch
 # uWSGI:
 USER root
 RUN pip install uwsgi
-# Copy the base uWSGI ini file to enable default dynamic uwsgi process number
-COPY ./app.ini /etc/uwsgi/
-# Which uWSGI .ini file should be used, to make it customizable
-ENV UWSGI_INI /etc/uwsgi/app.ini
 # By default, run 2 processes
 ENV UWSGI_CHEAPER 2
 # By default, when on demand, run up to 16 processes
@@ -67,6 +63,10 @@ RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
     apt-get install -y postgresql-client \
     ;fi
 
+# Copy the base uWSGI ini file to enable default dynamic uwsgi process number
+COPY ./app.ini /etc/uwsgi/
+# Which uWSGI .ini file should be used, to make it customizable
+ENV UWSGI_INI /etc/uwsgi/app.ini
 COPY ./requirements.txt /opt/
 RUN pip install -r /opt/requirements.txt
 WORKDIR /var/www/python_app
