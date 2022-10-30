@@ -1,0 +1,10 @@
+---
+- name: Setup -> Nginx configuration
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  loop:
+    - { src: ./templates/upstream.conf.j2, dest: /etc/nginx/conf.d/upstream.conf }
+    - { src: ./templates/default.j2, dest: /etc/nginx/sites-available/default }
+  notify: Restart, enable Nginx

@@ -1,0 +1,23 @@
+---
+- name: Make directory for react-app build files
+  ansible.builtin.file:
+    path: /etc/react-app
+    state: directory
+    mode: "0755"
+
+- name: Upload Dockerfile for build react-app image
+  ansible.posix.synchronize:
+    src: ./files/react-app
+    dest: /etc/react-app
+
+- name: Build Docker image
+  community.docker.docker_image:
+    name: react_app
+    build:
+      path: /etc/react-app
+      args:
+        - APP_NAME: "react-app_{{ item }}"
+        - SRC_REPO: "https://gitlab.com/entsupml/skillbox-deploy-blue-green.git"
+    tag: "{{ item }}"
+  with_items: "{{ ansible_facts['ansible_date_time']['iso8601_basic_short'] }}"
+  register: image_info

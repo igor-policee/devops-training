@@ -1,0 +1,10 @@
+---
+# tasks file for upstream_node
+- name: Install and setup Nginx upstream | Ubuntu
+  when: ansible_distribution == 'Ubuntu'
+  block:
+    - name: Install packages
+      ansible.builtin.include_tasks: ubuntu_packages.yml
+
+    - name: Setup Nginx
+      ansible.builtin.include_tasks: ubuntu_nginx_conf.yml

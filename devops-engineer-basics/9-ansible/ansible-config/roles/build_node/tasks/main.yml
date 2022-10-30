@@ -1,0 +1,12 @@
+---
+- name: Build ans deploy app | Ubuntu
+  when: ansible_distribution == 'Ubuntu'
+  block:
+    - name: Install packages
+      ansible.builtin.include_tasks: ubuntu_packages.yml
+
+    - name: Setup Nginx
+      ansible.builtin.include_tasks: ubuntu_build_app.yml
+
+    - name: Deploy app to webserver
+      ansible.builtin.include_tasks: ubuntu_deploy_app.yml

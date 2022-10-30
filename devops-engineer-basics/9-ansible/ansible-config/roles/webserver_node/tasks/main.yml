@@ -1,0 +1,11 @@
+---
+# tasks file for webserver_node
+
+- name: Install and setup Nginx webserver | Ubuntu
+  when: ansible_distribution == 'Ubuntu'
+  block:
+    - name: Install packages
+      ansible.builtin.include_tasks: ubuntu_packages.yml
+
+    - name: Setup Nginx
+      ansible.builtin.include_tasks: ubuntu_nginx_conf.yml

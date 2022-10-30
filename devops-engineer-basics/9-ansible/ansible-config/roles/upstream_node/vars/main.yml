@@ -1,0 +1,4 @@
+---
+# vars file for upstream_node
+upstream_name: react_app
+internal_ip_webserver_node_01: ""

@@ -1,0 +1,7 @@
+---
+- name: Setup Nginx configuration
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/sites-available/default
+    regexp: "root /var/www/html;"
+    line: "        root /var/www/react-app;"
+  notify: Restart, enable Nginx
