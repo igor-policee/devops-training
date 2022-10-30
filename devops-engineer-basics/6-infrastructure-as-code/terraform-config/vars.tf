@@ -37,7 +37,7 @@ variable "core_fraction" {
 
 variable "disk_size" {
   type    = string
-  default = "25"
+  default = "15"
 }
 
 variable "disk_type" {
@@ -48,6 +48,11 @@ variable "disk_type" {
 variable "ubuntu_image_id" {
   type    = string
   default = "fd8kdq6d0p8sij7h5qe3"
+}
+
+variable "ubuntu_family_id" {
+  type    = string
+  default = "ubuntu-2004-lts"
 }
 
 variable "ssh_public_key" {
