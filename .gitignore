@@ -2,7 +2,7 @@
 .venv/
 .git/
 hosts.ini
-**/.terraform
+.terraform*
 *.tfvars
 terraform.*
 .ansible-vault-pass.txt
