@@ -17,7 +17,7 @@ resource "yandex_compute_instance" "webserver-node-01" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = false
+    nat       = true
   }
 
   metadata = {
