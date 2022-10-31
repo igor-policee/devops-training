@@ -1,0 +1,13 @@
+---
+# handlers file for all roles
+- name: Restart, enable Nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: true
+
+- name: Start, enable Docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
