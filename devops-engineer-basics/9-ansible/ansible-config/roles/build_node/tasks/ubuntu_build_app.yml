@@ -1,24 +1,73 @@
 ---
-- name: Make directory for react-app build files
+- name: Make directory for source code
   ansible.builtin.file:
-    path: /etc/react-app
+    path: "/etc/{{ app_name }}"
     state: directory
     mode: "0755"
 
-- name: Upload Dockerfile for build react-app image
-  ansible.posix.synchronize:
-    src: ./files/react-app/
-    dest: /etc/react-app/
+- name: Download / update repository | react-app
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "/etc/{{ app_name }}/repo"
+    single_branch: true
+    version: master
+    update: true
+  register: repo_info
 
-- name: Build Docker image
-  community.docker.docker_image:
-    name: react_app
-    build:
-      path: /etc/react-app
+- name: Fix head commit
+  ansible.builtin.set_fact:
+    head_commit: "{{ repo_info['after'] | truncate(8, True, '') }}"
+
+- name: Fix build name
+  ansible.builtin.set_fact:
+    build_name: "{{ app_name }}_{{ head_commit }}"
+
+- name: Synchronize Dockerfile for build react-app image
+  ansible.posix.synchronize:
+    src: "./files/{{ app_name }}/Dockerfile"
+    dest: "/etc/{{ app_name }}/Dockerfile"
+
+- name: Build app in Docker
+  when: repo_info['changed'] == true
+  block:
+
+    - name: Build Docker image
+      community.docker.docker_image:
+        name: "{{ app_name }}"
+        build:
+          path: "/etc/{{ app_name }}"
+          args:
+            BUILD_NAME: "{{ build_name }}"
+        source: build
+        tag: "{{ head_commit }}"
+
+    - name: Make directory for builds
+      ansible.builtin.file:
+        path: "/etc/builds/{{ build_name }}"
+        state: directory
+        recurse: true
+        mode: "0755"
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: "{{ build_name }}"
+        image: "{{ app_name }}:{{ head_commit }}"
+        command: sleep infinity
+
+    - name: Get build from a container
+      ansible.builtin.shell: >-
+        docker cp {{ build_name }}:/src/{{ build_name }}/build/. /etc/builds/{{ build_name }}/
       args:
-        APP_NAME: "react-app_{{ item }}"
-        SRC_REPO: "https://gitlab.com/entsupml/skillbox-deploy-blue-green.git"
-    source: build
-    tag: "{{ item }}"
-  with_items: "{{ ansible_facts['date_time']['iso8601_basic_short'] }}"
-  register: image_info
+        executable: /bin/bash
+        creates: "/etc/builds/{{ build_name }}/index.html"
+
+    - name: Archive build
+      community.general.archive:
+        path: "/etc/builds/{{ build_name }}/"
+        dest: "/etc/builds/{{ build_name }}.tar"
+        remove: true
+
+    - name: Remove container
+      community.docker.docker_container:
+        name: "{{ build_name }}"
+        state: absent

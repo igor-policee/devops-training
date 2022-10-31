@@ -1,7 +1,9 @@
 ---
-- name: Install Docker
+- name: Install Git, Docker
   ansible.builtin.apt:
-    name: docker.io
+    name:
+      - git
+      - docker.io
     state: present
     update_cache: true
   notify: Start, enable Docker
