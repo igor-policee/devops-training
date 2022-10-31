@@ -4,27 +4,24 @@
   become: true
   become_user: root
   gather_facts: true
-  gather_subset:
-    - min
   roles:
     - webserver_node
+    - shared_handlers
 
 - name: Configuring -> 'upstream_node'
   hosts: upstream_node
   become: true
   become_user: root
   gather_facts: true
-  gather_subset:
-    - min
   roles:
     - upstream_node
+    - shared_handlers
 
 - name: Configuring -> 'build_node'
   hosts: build_node
   become: true
   become_user: root
   gather_facts: true
-  gather_subset:
-    - min
   roles:
     - build_node
+    - shared_handlers

@@ -4,7 +4,6 @@
   block:
     - name: Install packages
       ansible.builtin.include_tasks: ubuntu_packages.yml
-      dependencies: shared_handlers
 
     - name: Build app
       ansible.builtin.include_tasks: ubuntu_build_app.yml

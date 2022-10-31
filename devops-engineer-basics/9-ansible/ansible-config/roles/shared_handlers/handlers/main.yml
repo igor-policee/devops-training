@@ -5,9 +5,11 @@
     name: nginx
     state: restarted
     enabled: true
+  listen: Restart, enable Nginx
 
 - name: Start, enable Docker
   ansible.builtin.service:
     name: docker
     state: started
     enabled: true
+  listen: Start, enable Docker

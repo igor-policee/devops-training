@@ -7,8 +7,8 @@
 
 - name: Upload Dockerfile for build react-app image
   ansible.posix.synchronize:
-    src: ./files/react-app
-    dest: /etc/react-app
+    src: ./files/react-app/
+    dest: /etc/react-app/
 
 - name: Build Docker image
   community.docker.docker_image:
@@ -16,8 +16,9 @@
     build:
       path: /etc/react-app
       args:
-        - APP_NAME: "react-app_{{ item }}"
-        - SRC_REPO: "https://gitlab.com/entsupml/skillbox-deploy-blue-green.git"
+        APP_NAME: "react-app_{{ item }}"
+        SRC_REPO: "https://gitlab.com/entsupml/skillbox-deploy-blue-green.git"
+    source: build
     tag: "{{ item }}"
-  with_items: "{{ ansible_facts['ansible_date_time']['iso8601_basic_short'] }}"
+  with_items: "{{ ansible_facts['date_time']['iso8601_basic_short'] }}"
   register: image_info

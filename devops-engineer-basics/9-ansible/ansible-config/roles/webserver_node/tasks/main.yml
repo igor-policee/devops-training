@@ -6,7 +6,6 @@
   block:
     - name: Install packages
       ansible.builtin.include_tasks: ubuntu_packages.yml
-      dependencies: shared_handlers
 
     - name: Setup Nginx
       ansible.builtin.include_tasks: ubuntu_nginx_conf.yml
