@@ -7,3 +7,4 @@ hosts.ini
 terraform.*
 .ansible-vault-pass.txt
 .vagrant
+test.json
