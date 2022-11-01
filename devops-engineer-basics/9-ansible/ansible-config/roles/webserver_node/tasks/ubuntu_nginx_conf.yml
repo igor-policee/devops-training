@@ -3,5 +3,5 @@
   ansible.builtin.lineinfile:
     path: /etc/nginx/sites-available/default
     regexp: "root /var/www/html;"
-    line: "        root /var/www/react-app;"
+    line: "        root /var/www/{{ app_name }};"
   notify: Restart, enable Nginx

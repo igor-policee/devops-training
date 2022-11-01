@@ -9,5 +9,5 @@ RUN yarn install \
 FROM alpine:latest
 ARG BUILD_NAME
 USER root
-WORKDIR /builds
+WORKDIR /builds/${BUILD_NAME}
 COPY --from=builder /src/${BUILD_NAME}/build/ .

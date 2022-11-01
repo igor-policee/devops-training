@@ -5,7 +5,7 @@
     state: directory
     mode: "0755"
 
-- name: Download / update repository | react-app
+- name: Download/update repository | react-app
   ansible.builtin.git:
     repo: "https://{{ gitlab_username }}:{{ gitlab_token }}@{{ gitlab_server }}/{{ gitlab_username }}/{{ gitlab_project_name }}.git"
     dest: "/etc/{{ app_name }}/repo"
@@ -34,7 +34,6 @@
 - name: Build app and push to DockerHub
   when: repo_info['changed'] == true
   block:
-  
     - name: Log into DockerHub
       community.docker.docker_login:
         username: "{{ docker_hub_login }}"
@@ -51,15 +50,3 @@
         tag: "{{ head_commit }}"
         repository: "{{ docker_hub_login }}/{{ app_name }}:{{ head_commit }}"
         push: true
-
-    # - name: Get build from a container
-    #   ansible.builtin.shell: >-
-    #     docker cp {{ build_name }}:/src/{{ build_name }}/build/. /etc/builds/{{ build_name }}/
-    #   args:
-    #     executable: /bin/bash
-    #     creates: "/etc/builds/{{ build_name }}/index.html"
-
-    # - name: Remove container
-    #   community.docker.docker_container:
-    #     name: "{{ build_name }}"
-    #     state: absent

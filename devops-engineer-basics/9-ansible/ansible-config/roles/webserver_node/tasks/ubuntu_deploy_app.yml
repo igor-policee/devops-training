@@ -2,6 +2,7 @@
 - name: Deploy app
   when: hostvars['build-upstream-node-01']['repo_info']['changed'] == true
   block:
+
     - name: Log into DockerHub
       community.docker.docker_login:
         username: "{{ docker_hub_login }}"
@@ -23,9 +24,26 @@
         image: "{{ image_name }}"
         command: sleep infinity
 
-    # - name: Get build from a container
-    #   ansible.builtin.shell: >-
-    #     docker cp {{ build_name }}:/src/{{ build_name }}/build/. /etc/builds/{{ build_name }}/
-    #   args:
-    #     executable: /bin/bash
-    #     creates: "/etc/builds/{{ build_name }}/index.html"
+    - name: Make directory for builds
+      ansible.builtin.file:
+        path: /builds
+        state: directory
+
+    - name: Get build from a container
+      ansible.builtin.shell: >-
+        docker cp {{ build_name }}:/builds/{{ build_name }} /builds/
+      args:
+        executable: /bin/bash
+        creates: "/builds/{{ build_name }}/index.html"
+
+    - name: Create symlink Nginx -> actual build
+      ansible.builtin.file:
+        src: "/builds/{{ build_name }}"
+        dest: "/var/www/{{ app_name }}"
+        state: link
+        force: true
+
+    - name: Remove Docker container
+      community.docker.docker_container:
+        name: "{{ build_name }}"
+        state: absent
