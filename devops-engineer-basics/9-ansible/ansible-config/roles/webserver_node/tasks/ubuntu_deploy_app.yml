@@ -1,0 +1,31 @@
+---
+- name: Deploy app
+  when: hostvars['build-upstream-node-01']['repo_info']['changed'] == true
+  block:
+    - name: Log into DockerHub
+      community.docker.docker_login:
+        username: "{{ docker_hub_login }}"
+        password: "{{ docker_hub_token }}"
+
+    - name: Fix build info
+      ansible.builtin.set_fact:
+        image_name: "{{ docker_hub_login }}/{{ app_name }}:{{ hostvars['build-upstream-node-01']['head_commit'] }}"
+        build_name: "{{ hostvars['build-upstream-node-01']['build_name'] }}"
+
+    - name: Pull an image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        source: pull
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: "{{ build_name }}"
+        image: "{{ image_name }}"
+        command: sleep infinity
+
+    # - name: Get build from a container
+    #   ansible.builtin.shell: >-
+    #     docker cp {{ build_name }}:/src/{{ build_name }}/build/. /etc/builds/{{ build_name }}/
+    #   args:
+    #     executable: /bin/bash
+    #     creates: "/etc/builds/{{ build_name }}/index.html"

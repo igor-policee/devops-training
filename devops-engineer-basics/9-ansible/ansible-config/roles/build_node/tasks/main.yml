@@ -5,8 +5,5 @@
     - name: Install packages
       ansible.builtin.include_tasks: ubuntu_packages.yml
 
-    - name: Build app
+    - name: Build app and push to DockerHub
       ansible.builtin.include_tasks: ubuntu_build_app.yml
-
-    - name: Deploy app to webserver
-      ansible.builtin.include_tasks: ubuntu_deploy_app.yml

@@ -9,3 +9,6 @@
 
     - name: Setup Nginx
       ansible.builtin.include_tasks: ubuntu_nginx_conf.yml
+
+    - name: Deploy app to webserver
+      ansible.builtin.include_tasks: ubuntu_deploy_app.yml

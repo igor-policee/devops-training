@@ -1,6 +1,9 @@
 ---
-- name: Install Nginx
+- name: Install Nginx, Docker
   ansible.builtin.apt:
-    name: nginx
+    name:
+      - nginx
+      - docker.io
     state: present
     update_cache: true
+  notify: Start, enable Docker
