@@ -9,4 +9,4 @@ terraform.*
 .vagrant
 test.json
 *key
-devops-engineer-basics/9-ansible/ansible-config/roles/common/vars/main.yml
+devops-engineer-basics/9-ansible/ansible-config/pass
