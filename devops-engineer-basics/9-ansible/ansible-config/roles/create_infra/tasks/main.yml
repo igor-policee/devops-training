@@ -5,7 +5,11 @@
     state: present
   register: terraform_outputs
 
-- name: "Print IP"
+- name: 60 second pause for YC infra deployment
+  ansible.builtin.pause:
+    seconds: 60
+
+- name: "Print IP addresses"
   ansible.builtin.debug:
     msg:
       - "external_ip_address_build-upstream-node-01: {{ terraform_outputs['outputs']['external_ip_address_build-upstream-node-01']['value'] }}"
