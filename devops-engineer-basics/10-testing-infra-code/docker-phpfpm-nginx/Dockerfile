@@ -46,7 +46,7 @@ COPY --chown=nobody src/ /var/www/html/
 # Expose the port nginx is reachable on
 EXPOSE 8080
 
-ENTRYPOINT ["py.test", "-v", "/etc/nginx/test/test_infra.py"]
+# ENTRYPOINT ["py.test", "-v", "/etc/nginx/test/test_infra.py"]
 
 # Let supervisord start nginx & php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
