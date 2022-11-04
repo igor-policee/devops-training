@@ -1,0 +1,29 @@
+---
+- name: Create YC instances with Terraform
+  community.general.terraform:
+    project_path: "{{ terraform_dir }}"
+    state: present
+  register: terraform_outputs
+
+- name: "Print IP"
+  ansible.builtin.debug:
+    msg:
+      - "external_ip_address_build-upstream-node-01: {{ terraform_outputs['outputs']['external_ip_address_build-upstream-node-01']['value'] }}"
+      - "external_ip_address_webserver-node-01: {{ terraform_outputs['outputs']['external_ip_address_webserver-node-01']['value'] }}"
+      - "internal_ip_address_build-upstream-node-01: {{ terraform_outputs['outputs']['internal_ip_address_build-upstream-node-01']['value'] }}"
+      - "internal_ip_address_webserver-node-01: {{ terraform_outputs['outputs']['internal_ip_address_webserver-node-01']['value'] }}"
+
+- name: Add host to group 'webserver_node'
+  ansible.builtin.add_host:
+    hostname: webserver-node-01
+    ansible_host: "{{ terraform_outputs['outputs']['external_ip_address_webserver-node-01']['value'] }}"
+    groups: webserver_node
+
+- name: Add hosts to groups 'upstream_node', 'build_node'
+  ansible.builtin.add_host:
+    name: build-upstream-node-01
+    ansible_host: "{{ terraform_outputs['outputs']['external_ip_address_build-upstream-node-01']['value'] }}"
+    groups:
+      - upstream_node
+      - build_node
+    internal_ip_webserver_node_01: "{{ terraform_outputs['outputs']['internal_ip_address_webserver-node-01']['value'] }}"

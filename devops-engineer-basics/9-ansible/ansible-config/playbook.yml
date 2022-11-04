@@ -1,4 +1,10 @@
 ---
+- name: Create YC infrastructure with Terraform
+  hosts: localhost
+  roles:
+    - create_infra
+    - common
+
 - name: Configuring -> 'build_node'
   hosts: build_node
   become: true
