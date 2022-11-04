@@ -11,3 +11,4 @@ test.json
 *key
 devops-engineer-basics/9-ansible/ansible-config/pass
 __pycache__
+.pytest_cache
