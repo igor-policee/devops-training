@@ -4,7 +4,7 @@ FROM alpine:3.11
 RUN apk --no-cache add php php-fpm php-opcache php-openssl php-curl \
   nginx supervisor curl openrc python3
 
-# Install testing packages
+# Install packages for Testinfra
 RUN pip3 install setuptools testinfra
 
 # https://github.com/codecasts/php-alpine/issues/21
@@ -28,7 +28,7 @@ RUN mkdir -p /var/www/html
 
 # Make dir and copy script for basic tests
 RUN mkdir -p /etc/nginx/test
-COPY ./test/test.py etc/nginx/test/
+COPY ./test/test_infra.py /etc/nginx/test/
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /var/www/html && \
@@ -45,6 +45,8 @@ COPY --chown=nobody src/ /var/www/html/
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
+
+ENTRYPOINT ["py.test", "-v", "/etc/nginx/test/test_infra.py"]
 
 # Let supervisord start nginx & php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
