@@ -26,10 +26,6 @@ COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Setup document root
 RUN mkdir -p /var/www/html
 
-# Make dir and copy script for basic tests
-RUN mkdir -p /etc/nginx/test
-COPY ./test/test_infra.py /etc/nginx/test/
-
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /var/www/html && \
   chown -R nobody.nobody /run && \
@@ -43,7 +39,14 @@ USER nobody
 WORKDIR /var/www/html
 COPY --chown=nobody src/ /var/www/html/
 
-ENTRYPOINT ["py.test", "-v", "/etc/nginx/test/test_infra.py"]
+# Make dir for Testinfra script 
+RUN mkdir -p /etc/nginx/test
+
+# Copy Testinfra script
+COPY ./test/test_infra.py /etc/nginx/test/
+
+# Launching verification infrastructure Testinfra test
+RUN py.test -v /etc/nginx/test/test_infra.py
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
