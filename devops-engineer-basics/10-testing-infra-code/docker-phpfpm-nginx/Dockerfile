@@ -1,14 +1,8 @@
 FROM alpine:3.11
 
-# ADD https://dl.bintray.com/php-alpine/key/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
-
-# make sure you can use HTTPS
-# RUN apk --update add ca-certificates
-# RUN echo "https://dl.bintray.com/php-alpine/v3.11/php-7.4" >> /etc/apk/repositories
-
 # Install packages
 RUN apk --no-cache add php php-fpm php-opcache php-openssl php-curl \
-  nginx supervisor curl openrc python3 python3-pip
+  nginx supervisor curl openrc python3
 
 # Install testing packages
 RUN pip3 install setuptools testinfra
@@ -32,8 +26,9 @@ COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Setup document root
 RUN mkdir -p /var/www/html
 
-# Make dir for nginx tests
+# Make dir and copy script for basic tests
 RUN mkdir -p /etc/nginx/test
+COPY ./test/test.py etc/nginx/test/
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /var/www/html && \
