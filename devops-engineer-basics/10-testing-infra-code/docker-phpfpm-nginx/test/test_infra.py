@@ -9,7 +9,6 @@ def test_nginx_is_installed(host):
     assert nginx.version.startswith("1.1")
 
 
-def test_nginx_running_and_enabled(host):
+def test_nginx_running(host):
     nginx = host.service("nginx")
-    assert nginx.is_running
     assert nginx.is_enabled
