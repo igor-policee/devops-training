@@ -39,7 +39,10 @@ USER nobody
 WORKDIR /var/www/html
 COPY --chown=nobody src/ /var/www/html/
 
-# Make dir for Testinfra script 
+# Switch to root user
+USER root
+
+# Make dir for Testinfra script
 RUN mkdir -p /etc/nginx/test
 
 # Copy Testinfra script
@@ -50,6 +53,9 @@ RUN py.test -v /etc/nginx/test/test_infra.py
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
+
+# Switch to use a non-root user from here on
+USER nobody
 
 # Let supervisord start nginx & php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
