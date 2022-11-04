@@ -1,4 +1,4 @@
-def test_system_info_file(host):
+def test_system_info(host):
     assert host.system_info.type == "linux"
     assert host.system_info.distribution == "alpine"
 
