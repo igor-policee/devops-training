@@ -5,7 +5,7 @@ RUN apk --no-cache add php php-fpm php-opcache php-openssl php-curl \
   nginx supervisor curl openrc python3
 
 # Install packages for Testinfra
-RUN pip3 install setuptools testinfra
+RUN pip3 install setuptools pytest-testinfra
 
 # https://github.com/codecasts/php-alpine/issues/21
 RUN ln -s -f /usr/bin/php7 /usr/bin/php
