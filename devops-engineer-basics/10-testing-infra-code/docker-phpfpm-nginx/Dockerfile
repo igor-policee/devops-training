@@ -43,10 +43,10 @@ USER nobody
 WORKDIR /var/www/html
 COPY --chown=nobody src/ /var/www/html/
 
+ENTRYPOINT ["py.test", "-v", "/etc/nginx/test/test_infra.py"]
+
 # Expose the port nginx is reachable on
 EXPOSE 8080
-
-# ENTRYPOINT ["py.test", "-v", "/etc/nginx/test/test_infra.py"]
 
 # Let supervisord start nginx & php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
