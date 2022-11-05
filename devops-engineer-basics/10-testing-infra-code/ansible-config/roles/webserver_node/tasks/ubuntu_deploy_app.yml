@@ -1,0 +1,10 @@
+---
+- name: Run Docker container
+  community.docker.docker_container:
+    name: "{{ app_name }}-cont"
+    image: "{{ app_name }}:{{ app_image_tag }}"
+    restart: false
+    restart_policy: always
+    ports:
+      - "80:8080"
+  when: repo_info['changed'] == true

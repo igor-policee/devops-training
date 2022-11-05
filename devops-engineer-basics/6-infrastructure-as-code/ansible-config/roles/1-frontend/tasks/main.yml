@@ -5,7 +5,9 @@
     path: /usr/bin/node
   register: check_node_result
 
-- block:
+- name: Install Node.js
+  when: not check_node_result.stat.exists
+  block:
     - name: Download and execute -> NodeSource installation script
       ansible.builtin.shell: >-
         curl -sL https://deb.nodesource.com/setup_{{ node_major_version }}.x | sudo -E bash -
@@ -18,17 +20,15 @@
         state: latest
         update_cache: true
 
-  when: not check_node_result.stat.exists
-
 - name: Check for file availability -> /usr/bin/yarn
   ansible.builtin.stat:
     path: /usr/bin/yarn
   register: check_yarn_result
 
 - name: Install -> Yarn
+  when: not check_yarn_result.stat.exists
   ansible.builtin.shell: >-
     npm install -g yarn
-  when: not check_yarn_result.stat.exists
 
 - name: Install -> Git
   ansible.builtin.apt:

@@ -4,6 +4,6 @@
   become: true
   tasks:
     - name: Configuring -> 'frontend_servers'
+      when: ansible_distribution == 'Ubuntu'
       include_role:
         name: 1-frontend
-      when: ansible_distribution == 'Ubuntu'

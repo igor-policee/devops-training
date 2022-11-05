@@ -5,9 +5,10 @@
     state: present
   register: terraform_outputs
 
-- name: 60 second pause for YC infra deployment
+- name: 30 second pause to wait for the YC infra to be deployed
+  when: terraform_outputs['changed'] == true
   ansible.builtin.pause:
-    seconds: 60
+    seconds: 30
 
 - name: "Print IP addresses"
   ansible.builtin.debug:

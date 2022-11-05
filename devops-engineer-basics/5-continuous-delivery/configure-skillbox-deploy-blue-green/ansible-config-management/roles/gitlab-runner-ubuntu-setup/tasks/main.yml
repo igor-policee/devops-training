@@ -5,16 +5,18 @@
     manager: auto
 
 - name: Result -> gitlab-runner
+  when: "'gitlab-runner' in ansible_facts.packages"
   ansible.builtin.debug:
     msg: gitlab-runner found
-  when: "'gitlab-runner' in ansible_facts.packages"
 
 - name: Result -> gitlab-runner
+  when: "'gitlab-runner' not in ansible_facts.packages"
   ansible.builtin.debug:
     msg: gitlab-runner NOT found
-  when: "'gitlab-runner' not in ansible_facts.packages"
 
-- block:
+- name: Install Gitlab Runner
+  when: "'gitlab-runner' not in ansible_facts.packages"
+  block: 
     - name: Install -> GitLab runner from the official repository
       ansible.builtin.shell: >-
         curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash
@@ -26,8 +28,6 @@
         update_cache: true
       notify:
         Start and enable service -> gitlab-runner
-
-  when: "'gitlab-runner' not in ansible_facts.packages"
 
 - name: Add user 'gitlab-runner' -> 'docker,admin' groups
   ansible.builtin.user:
@@ -44,6 +44,7 @@
     var: check_result['stdout']
 
 - name: "Register GitLab Runner (base: ubuntu, executor: shell)"
+  when: check_result['stdout'] == 'runner not registered'
   ansible.builtin.shell: >-
     gitlab-runner register
     --non-interactive
@@ -56,4 +57,3 @@
     --run-untagged=true
     --locked="false"
     --access-level="not_protected"
-  when: check_result['stdout'] == 'runner not registered'

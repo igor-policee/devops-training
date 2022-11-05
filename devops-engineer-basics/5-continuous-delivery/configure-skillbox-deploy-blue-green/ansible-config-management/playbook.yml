@@ -4,14 +4,14 @@
   become: true
   tasks:
     - name: "Base configure -> {{ ansible_distribution }}"
+      when: ansible_distribution == 'Ubuntu'
       include_role:
         name: ubuntu-base-setup
-      when: ansible_distribution == 'Ubuntu'
 
     - name: "Base configure -> {{ ansible_distribution }}"
+      when: ansible_distribution == 'CentOS'
       include_role:
         name: centos-base-setup
-      when: ansible_distribution == 'CentOS'
 
     - name: "Setup -> GitLab Runner (base: docker, executor: docker)"
       include_role:

@@ -1,0 +1,26 @@
+---
+- name: Make directory for app source code
+  ansible.builtin.file:
+    path: "/app/{{ app_name }}"
+    state: directory
+    recurse: true
+    mode: "0755"
+
+- name: Download/update repository
+  ansible.builtin.git:
+    repo: "https://{{ gitlab_username }}:{{ gitlab_token }}@{{ gitlab_server }}/{{ gitlab_username }}/{{ gitlab_project_name }}.git"
+    dest: "/app/{{ app_name }}"
+    single_branch: true
+    version: main
+    update: true
+  register: repo_info
+
+- name: Build Docker app Docker image
+  when: repo_info['changed'] == true
+  community.docker.docker_image:
+    name: "{{ app_name }}"
+    build:
+      path: "/app/{{ app_name }}"
+    source: build
+    tag: "{{ app_image_tag }}"
+  

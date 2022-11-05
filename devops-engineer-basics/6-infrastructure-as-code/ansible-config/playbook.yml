@@ -4,14 +4,14 @@
   become: true
   tasks:
     - name: Configuring -> 'frontend_servers'
+      
       include_role:
         name: 1-frontend
-      when: ansible_distribution == 'Ubuntu'
 
 - hosts: load_balancer
   become: true
   tasks:
     - name: Configuring -> 'load_balancer'
+      when: ansible_distribution == 'Ubuntu'
       include_role:
         name: 2-load-balancer
-      when: ansible_distribution == 'Ubuntu'

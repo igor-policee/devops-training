@@ -29,6 +29,7 @@
     var: check_result['stdout']
 
 - name: "Register GitLab Runner (base: docker, executor: docker)"
+  when: check_result['stdout'] == 'runner not registered'
   community.docker.docker_container_exec:
     container: "{{ gitlab_runner_name }}"
     command: >-
@@ -42,4 +43,3 @@
       --docker-image "docker:20.10.16"
       --docker-privileged
       --docker-volumes "/certs/client"
-  when: check_result['stdout'] == 'runner not registered'
