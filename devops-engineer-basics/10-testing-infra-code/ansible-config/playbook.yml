@@ -5,11 +5,11 @@
     - create_infra
     - common
 
-# - name: Configuring -> 'webserver_node'
-#   hosts: webserver_node
-#   become: true
-#   become_user: root
-#   gather_facts: true
-#   roles:
-#     - webserver_node
-#     - common
+- name: Configuring -> 'webserver_node'
+  hosts: webserver_node
+  become: true
+  become_user: root
+  gather_facts: true
+  roles:
+    - webserver_node
+    - common

@@ -6,4 +6,3 @@
       - docker.io
     state: present
     update_cache: true
-  notify: Start, enable Docker

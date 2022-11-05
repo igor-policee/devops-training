@@ -1,7 +1,7 @@
 ---
 # tasks file for webserver_node
 
-- name: Install and setup Nginx webserver | Ubuntu
+- name: Install packages, build and deploy app | Ubuntu
   when: ansible_distribution == 'Ubuntu'
   block:
     - name: Install packages

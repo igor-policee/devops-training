@@ -10,14 +10,14 @@
   ansible.builtin.pause:
     seconds: 30
 
-# - name: "Print IP addresses"
-#   ansible.builtin.debug:
-#     msg:
-#       - "external_ip_address_webserver-node-01: {{ terraform_outputs['outputs']['external_ip_address_webserver-node-01']['value'] }}"
-#       - "internal_ip_address_webserver-node-01: {{ terraform_outputs['outputs']['internal_ip_address_webserver-node-01']['value'] }}"
+- name: "Print IP addresses"
+  ansible.builtin.debug:
+    msg:
+      - "external_ip_address_webserver-node-01: {{ terraform_outputs['outputs']['external_ip_address_webserver-node-01']['value'] }}"
+      - "internal_ip_address_webserver-node-01: {{ terraform_outputs['outputs']['internal_ip_address_webserver-node-01']['value'] }}"
 
-# - name: Add host to group 'webserver_node'
-#   ansible.builtin.add_host:
-#     hostname: webserver-node-01
-#     ansible_host: "{{ terraform_outputs['outputs']['external_ip_address_webserver-node-01']['value'] }}"
-#     groups: webserver_node
+- name: Add host to group 'webserver_node'
+  ansible.builtin.add_host:
+    hostname: webserver-node-01
+    ansible_host: "{{ terraform_outputs['outputs']['external_ip_address_webserver-node-01']['value'] }}"
+    groups: webserver_node
