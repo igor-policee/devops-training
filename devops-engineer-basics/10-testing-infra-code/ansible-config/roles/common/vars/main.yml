@@ -1,8 +1,0 @@
----
-terraform_dir: /home/igor-polishchuk/PycharmProjects/devops-pro-course/devops-engineer-basics/10-testing-infra-code/terraform-config
-app_name: docker-phpfpm-nginx
-app_image_tag: skillbox
-gitlab_token: "mTsjRNcetuUvga49M721"
-gitlab_username: "igor_polishchuk_2"
-gitlab_server: "gitlab.skillbox.ru"
-gitlab_project_name: "docker-phpfpm-nginx"
