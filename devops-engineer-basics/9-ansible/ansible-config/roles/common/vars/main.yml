@@ -1,9 +1,0 @@
----
-terraform_dir: /home/igor-polishchuk/PycharmProjects/devops-pro-course/devops-engineer-basics/9-ansible/terraform-config
-app_name: "react-app"
-gitlab_token: "mTsjRNcetuUvga49M721"
-gitlab_username: "igor_polishchuk_2"
-gitlab_server: "gitlab.skillbox.ru"
-gitlab_project_name: "skillbox-deploy-blue-green"
-docker_hub_login: "igorpolicee"
-docker_hub_token: "dckr_pat_g4Tpmq3PuVXBNuWygK3pvEp74as"
