@@ -1,9 +1,8 @@
 ---
 - name: Make directory for app source code
   ansible.builtin.file:
-    path: "/app/{{ app_name }}"
+    path: "/app"
     state: directory
-    recurse: true
     mode: "0755"
 
 - name: Download/update repository
@@ -23,4 +22,3 @@
       path: "/app/{{ app_name }}"
     source: build
     tag: "{{ app_image_tag }}"
-  
