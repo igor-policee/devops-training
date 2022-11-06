@@ -1,1 +1,1 @@
-# Учебный репозиторий курса [«Профессия DevOps-инженер PRO»](https://go.skillbox.ru/profession/profession-dev-ops-pro) 2022
+# DevOps Training Repository
