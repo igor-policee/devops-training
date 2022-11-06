@@ -21,4 +21,5 @@
     build:
       path: "/app/{{ app_name }}"
     source: build
+    force_source: true
     tag: "{{ app_image_tag }}"
