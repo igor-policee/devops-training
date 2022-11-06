@@ -1,8 +1,0 @@
----
-- name: Converge
-  hosts: all
-  gather_facts: false
-  tasks:
-    - name: "Include webserver_node"
-      ansible.builtin.include_role:
-        name: "webserver_node"
